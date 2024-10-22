@@ -3,3 +3,11 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
 }
+
+buildscript {
+    dependencies {
+        classpath(libs.androidx.navigation.safe.args.gradle.plugin)
+        classpath(libs.hilt.android.gradle.plugin)
+        classpath(libs.google.services)
+    }
+}
