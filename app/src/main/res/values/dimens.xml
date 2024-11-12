@@ -3,5 +3,8 @@
 
     <dimen name="startButtonWidth">120dp</dimen>
     <dimen name="startButtonHeight">60dp</dimen>
-    <dimen name="buttonCorners">20dp</dimen>
+    <dimen name="optionButtonWidth">180dp</dimen>
+    <dimen name="optionButtonHeight">55dp</dimen>
+    <dimen name="buttonCorners">10dp</dimen>
+    <dimen name="edittextHeight">60dp</dimen>
 </resources>
