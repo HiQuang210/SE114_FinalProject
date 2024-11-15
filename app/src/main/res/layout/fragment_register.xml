@@ -74,7 +74,7 @@
             style="@style/editText"/>
 
         <EditText
-            android:id="@+id/edRegEmail"
+            android:id="@+id/edEmailReg"
             android:layout_width="0dp"
             android:layout_height="@dimen/edittextHeight"
             android:hint="Email"
@@ -94,7 +94,7 @@
             android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="@id/guidelineLoginLeft"
             app:layout_constraintEnd_toEndOf="@id/guidelineLoginRight"
-            app:layout_constraintTop_toBottomOf="@id/edRegEmail"
+            app:layout_constraintTop_toBottomOf="@id/edEmailReg"
             style="@style/editText"/>
 
         <EditText
@@ -109,7 +109,7 @@
             app:layout_constraintTop_toBottomOf="@id/edRegPassword"
             style="@style/editText"/>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.github.leandroborgesferreira.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/btnRegReg"
             android:layout_width="0dp"
             android:layout_height="@dimen/optionButtonHeight"
