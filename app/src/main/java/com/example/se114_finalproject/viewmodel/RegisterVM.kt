@@ -2,13 +2,17 @@ package com.example.se114_finalproject.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.se114_finalproject.data.User
+import com.example.se114_finalproject.utilities.Constants.USER_COLLECTION
 import com.example.se114_finalproject.utilities.RegisterFieldState
 import com.example.se114_finalproject.utilities.RegisterValidation
 import com.example.se114_finalproject.utilities.Resource
 import com.example.se114_finalproject.utilities.validateEmail
+import com.example.se114_finalproject.utilities.validateFirstName
+import com.example.se114_finalproject.utilities.validateLastName
 import com.example.se114_finalproject.utilities.validatePassword
+import com.example.se114_finalproject.utilities.validatePasswordMatch
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -18,42 +22,89 @@ import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterVM @Inject constructor (private val firebaseAuth: FirebaseAuth): ViewModel() {
+class RegisterVM @Inject constructor(private val firebaseAuth: FirebaseAuth, private val db: FirebaseFirestore) : ViewModel() {
 
-    private val _register = MutableStateFlow<Resource<FirebaseUser>>(Resource.Unspecified())
-    val register: Flow<Resource<FirebaseUser>> = _register
+    private val _register = MutableStateFlow<Resource<User>>(Resource.Unspecified())
+    val register: Flow<Resource<User>> = _register
 
     private val _validation = Channel<RegisterFieldState>()
     val validation = _validation.receiveAsFlow()
-    fun createAccountWithEmailAndPassword(user: User, password: String) {
-        if (checkValidation(user, password)) {
-            runBlocking {
-                _register.emit(Resource.Loading())
-            }
-            firebaseAuth.createUserWithEmailAndPassword(user.email, password)
-                .addOnSuccessListener {
-                    it.user?.let {
-                        _register.value = Resource.Success(it)
-                    }
-                }.addOnFailureListener {
-                    _register.value = Resource.Error(it.message.toString())
-                }
-        }else{
-            val registerFieldState = RegisterFieldState (
-                validateEmail(user.email), validatePassword(password)
-            )
+
+    private val _successMessage = Channel<String>()
+    val successMessage = _successMessage.receiveAsFlow()
+
+    fun createAccountWithEmailAndPassword(user: User, password: String, confirmPassword: String) {
+        val registerFieldState = RegisterFieldState(
+            firstName = validateFirstName(user.firstName),
+            lastName = validateLastName(user.lastName),
+            email = validateEmail(user.email),
+            password = validatePassword(password),
+            confirmPassword = validatePasswordMatch(password, confirmPassword)
+        )
+
+        if (!isLocalValidationSuccessful(registerFieldState)) {
             runBlocking {
                 _validation.send(registerFieldState)
             }
+            return
         }
+
+        db.collection(USER_COLLECTION)
+            .whereEqualTo("email", user.email)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    runBlocking {
+                        _validation.send(
+                            registerFieldState.copy(
+                                email = RegisterValidation.Failed("This email is already registered.")
+                            )
+                        )
+                    }
+                } else {
+                    registerUserInFirebase(user, password)
+                }
+            }
+            .addOnFailureListener {
+                _register.value = Resource.Error("Error checking email: ${it.message}")
+            }
     }
 
-    private fun checkValidation(user: User, password: String) : Boolean{
-        val emailValidation = validateEmail(user.email)
-        val passwordValidation = validatePassword(password)
-        val successRegister =
-            emailValidation is RegisterValidation.Success && passwordValidation is RegisterValidation.Success
+    private fun registerUserInFirebase(user: User, password: String) {
+        runBlocking {
+            _register.emit(Resource.Loading())
+        }
+        firebaseAuth.createUserWithEmailAndPassword(user.email, password)
+            .addOnSuccessListener {
+                it.user?.let { firebaseUser ->
+                    saveUserInfo(firebaseUser.uid, user)
+                }
+            }
+            .addOnFailureListener {
+                _register.value = Resource.Error(it.message.toString())
+            }
+    }
 
-        return successRegister
+    private fun isLocalValidationSuccessful(registerFieldState: RegisterFieldState): Boolean {
+        return registerFieldState.firstName is RegisterValidation.Success &&
+                registerFieldState.lastName is RegisterValidation.Success &&
+                registerFieldState.email is RegisterValidation.Success &&
+                registerFieldState.password is RegisterValidation.Success &&
+                registerFieldState.confirmPassword is RegisterValidation.Success
+    }
+
+    private fun saveUserInfo(userID: String, user: User) {
+        db.collection(USER_COLLECTION)
+            .document(userID)
+            .set(user)
+            .addOnSuccessListener {
+                _register.value = Resource.Success(user)
+                runBlocking {
+                    _successMessage.send("Your account has been successfully created.")
+                }
+            }
+            .addOnFailureListener {
+                _register.value = Resource.Error(it.message.toString())
+            }
     }
 }
