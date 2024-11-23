@@ -1,5 +1,6 @@
 package com.example.se114_finalproject.fragments.LoginRegister
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.se114_finalproject.R
 import com.example.se114_finalproject.data.User
 import com.example.se114_finalproject.databinding.FragmentRegisterBinding
@@ -41,6 +43,20 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.tvRegSubtitle2.setOnClickListener {
+            binding.tvRegSubtitle2.paintFlags =
+                binding.tvRegSubtitle2.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+        }
+
+        binding.tvRegSubtitle2.setOnFocusChangeListener { _, hasFocus ->
+            binding.tvRegSubtitle2.paintFlags = if (hasFocus) {
+                binding.tvRegSubtitle2.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+            } else {
+                binding.tvRegSubtitle2.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
+            }
+        }
 
         binding.apply {
             btnRegReg.setOnClickListener {

@@ -31,7 +31,7 @@
             style="@style/h3"
             app:layout_constraintTop_toBottomOf="@id/LogoSmall"
             app:layout_constraintStart_toStartOf="@id/guidelineLoginLeft"
-            android:text="Đăng nhập"
+            android:text="@string/LoginTitle"
             android:textAlignment="center"
             android:gravity="center"
             android:textSize="40sp"/>
@@ -42,11 +42,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Chưa có tài khoản? Đăng ký ngay"
-            android:textAlignment="center"
+            android:text="@string/LoginSubtitle"
+            android:textAlignment="textStart"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@id/guidelineLoginLeft"
             app:layout_constraintTop_toBottomOf="@id/tvLoginTitle" />
+
+        <TextView
+            android:id="@+id/tvLoginSubtitle2"
+            style="@style/h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/LoginSubtitle2"
+            android:textColor="@color/azure_text_selector"
+            android:textAlignment="textStart"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/guidelineLoginLeft"
+            app:layout_constraintTop_toBottomOf="@id/tvLoginSubtitle" />
         
         <EditText
             android:id="@+id/edLoginEmail"
@@ -54,10 +67,11 @@
             android:layout_height="@dimen/edittextHeight"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="20dp"
+            android:singleLine="true"
             app:layout_constraintStart_toStartOf="@id/guidelineLoginLeft"
             app:layout_constraintEnd_toEndOf="@id/guidelineLoginRight"
-            app:layout_constraintTop_toBottomOf="@id/tvLoginSubtitle"
+            app:layout_constraintTop_toBottomOf="@id/tvLoginSubtitle2"
             style="@style/editText"/>
 
         <EditText
@@ -67,6 +81,7 @@
             android:hint="Password"
             android:inputType="textPassword"
             android:layout_marginTop="20dp"
+            android:singleLine="true"
             app:layout_constraintStart_toStartOf="@id/guidelineLoginLeft"
             app:layout_constraintEnd_toEndOf="@id/guidelineLoginRight"
             app:layout_constraintTop_toBottomOf="@id/edLoginEmail"
@@ -76,9 +91,11 @@
             android:id="@+id/chkShowPass"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:padding="8dp"
             style="@style/h2"
-            android:text="Hiện mật khẩu"
+            android:text="@string/ShowPasswordTitle"
             android:textSize="15sp"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="@id/guidelineLoginLeft"
@@ -90,25 +107,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="Quên mật khẩu?"
+            android:text="@string/ForgotTitle"
             android:textAlignment="center"
             android:textSize="15sp"
             android:textColor="@color/black"
             app:layout_constraintEnd_toStartOf="@id/guidelineLoginRight"
             app:layout_constraintTop_toBottomOf="@id/edLoginPassword" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.github.leandroborgesferreira.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/btnLoginLogin"
             android:layout_width="0dp"
             android:layout_height="@dimen/optionButtonHeight"
-            android:text="Đăng nhập"
+            android:text="@string/btnLoginText"
             android:textColor="@color/black"
             android:layout_marginTop="50dp"
             style="@style/blueButtonStyle"
             android:fontFamily="@font/poppins_regular"
             app:layout_constraintTop_toBottomOf="@id/tvForgotPass"
             app:layout_constraintStart_toStartOf="@id/guidelineLoginLeft"
-            app:layout_constraintEnd_toEndOf="@id/guidelineLoginRight" />
+            app:layout_constraintEnd_toEndOf="@id/guidelineLoginRight"
+            app:spinning_bar_color="@color/white"/>
 
         <ImageView
             android:id="@+id/facebookLogin"

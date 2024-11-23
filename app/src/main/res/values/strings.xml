@@ -11,7 +11,12 @@
     <string name="login_failed">"Login failed"</string>
     <string name="IntroTitle">"EDango Shopping\nProvide the best\nAt your service "</string>
     <string name="IntroSubtitle">Any time, any where\nWith just one swipe</string>
+    <string name="LoginSubtitle">Don\'t have an account yet?</string>
+    <string name="LoginSubtitle2">Sign up here.</string>
     <string name="startButtonText">Start</string>
     <string name="btnRegText">Sign up</string>
     <string name="btnLoginText">Login</string>
+    <string name="ForgotTitle">Forgot password</string>
+    <string name="LoginTitle">Sign in</string>
+    <string name="ShowPasswordTitle">Show password</string>
 </resources>
