@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background"
+        android:scaleType="centerCrop"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/LogoSmall"
+            android:layout_width="150dp"
+            android:layout_height="110dp"
+            android:background="@drawable/logo_small"
+            android:layout_marginTop="70dp"
+            app:layout_constraintStart_toStartOf="@id/guidelineResetLeft"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvResetTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            style="@style/h3"
+            app:layout_constraintTop_toBottomOf="@id/LogoSmall"
+            app:layout_constraintStart_toStartOf="@id/guidelineResetLeft"
+            android:text="@string/ResetTitle"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textSize="40sp"/>
+
+        <TextView
+            android:id="@+id/tvLoginSubtitle"
+            style="@style/h2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/ResetSubtitle"
+            android:textAlignment="textStart"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/guidelineResetLeft"
+            app:layout_constraintEnd_toEndOf="@id/guidelineResetRight"
+            app:layout_constraintTop_toBottomOf="@id/tvResetTitle" />
+
+        <EditText
+            android:id="@+id/edResetEmail"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/edittextHeight"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:layout_marginTop="25dp"
+            android:singleLine="true"
+            app:layout_constraintStart_toStartOf="@id/guidelineResetLeft"
+            app:layout_constraintEnd_toEndOf="@id/guidelineResetRight"
+            app:layout_constraintTop_toBottomOf="@id/tvLoginSubtitle"
+            style="@style/editText"/>
+        
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@id/guidelineResetLeft"
+            app:layout_constraintEnd_toEndOf="@id/guidelineResetRight"
+            app:layout_constraintTop_toBottomOf="@id/edResetEmail">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnResetBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btnBackText"
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:layout_marginEnd="5dp"
+                style="@style/whiteButtonStyle"
+                android:fontFamily="@font/poppins_regular"
+                app:spinning_bar_color="@color/white"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnResetPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btnResetText"
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                style="@style/blueButtonStyle"
+                android:fontFamily="@font/poppins_regular"
+                app:spinning_bar_color="@color/white"/>
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineResetLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineResetRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

@@ -36,16 +36,27 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvLoginSubtitle2.setOnClickListener{
+        binding.tvLoginSubtitle2.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
+        binding.tvForgotPass.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_resetPasswordFragment)
+        }
 
-        binding.apply {
-            binding.btnLoginLogin.setOnClickListener {
-                val email = edLoginEmail.text.toString().trim()
-                val password = edLoginPassword.text.toString()
-                viewModel.login(email, password)
+        binding.btnLoginLogin.setOnClickListener {
+            val email = binding.edLoginEmail.text.toString().trim()
+            val password = binding.edLoginPassword.text.toString().trim()
+
+            if (email.isEmpty()) {
+                binding.edLoginEmail.error = "Email cannot be empty"
+                return@setOnClickListener
             }
+            if (password.isEmpty()) {
+                binding.edLoginPassword.error = "Password cannot be empty"
+                return@setOnClickListener
+            }
+
+            viewModel.login(email, password)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

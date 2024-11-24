@@ -1,6 +1,5 @@
 package com.example.se114_finalproject.fragments.LoginRegister
 
-import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -45,17 +44,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.tvRegSubtitle2.setOnClickListener {
-            binding.tvRegSubtitle2.paintFlags =
-                binding.tvRegSubtitle2.paintFlags or Paint.UNDERLINE_TEXT_FLAG
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
-        }
-
-        binding.tvRegSubtitle2.setOnFocusChangeListener { _, hasFocus ->
-            binding.tvRegSubtitle2.paintFlags = if (hasFocus) {
-                binding.tvRegSubtitle2.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-            } else {
-                binding.tvRegSubtitle2.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
-            }
         }
 
         binding.apply {

@@ -19,4 +19,8 @@
     <string name="ForgotTitle">Forgot password</string>
     <string name="LoginTitle">Sign in</string>
     <string name="ShowPasswordTitle">Show password</string>
+    <string name="ResetSubtitle">We will send you the password reset instruction to your email.\nIf you don\'t see it, please check your spam folder.</string>
+    <string name="ResetTitle">Reset Password</string>
+    <string name="btnResetText">Send</string>
+    <string name="btnBackText">Back</string>
 </resources>
