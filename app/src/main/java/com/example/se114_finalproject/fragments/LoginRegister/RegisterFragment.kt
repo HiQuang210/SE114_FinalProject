@@ -1,5 +1,8 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.se114_finalproject.fragments.LoginRegister
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,18 +21,26 @@ import com.example.se114_finalproject.databinding.FragmentRegisterBinding
 import com.example.se114_finalproject.utilities.RegisterValidation
 import com.example.se114_finalproject.utilities.Resource
 import com.example.se114_finalproject.viewmodel.RegisterVM
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 private const val TAG = "RegisterFragment"
+private const val GOOGLE_SIGN_IN_REQUEST_CODE = 1001
 
+@Suppress("DEPRECATION")
 @AndroidEntryPoint
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private lateinit var binding: FragmentRegisterBinding
     private val viewModel by viewModels<RegisterVM>()
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +53,13 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupGoogleSignIn()
+
+        binding.gmailRegButton.setOnClickListener {
+            val signInIntent = googleSignInClient.signInIntent
+            startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE)
+        }
 
         binding.tvRegSubtitle2.setOnClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
@@ -63,6 +81,36 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         observeViewModel()
     }
 
+    private fun setupGoogleSignIn() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GOOGLE_SIGN_IN_REQUEST_CODE) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            if (task.isSuccessful) {
+                val account = task.result
+                account?.let {
+                    handleGoogleSignInResult(it)
+                }
+            } else {
+                Log.e(TAG, "Google sign-in failed: ${task.exception?.message}")
+            }
+        }
+    }
+
+    private fun handleGoogleSignInResult(account: GoogleSignInAccount) {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        viewModel.signInWithGoogle(credential, account)
+    }
+
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -79,6 +127,27 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                             is Resource.Error -> {
                                 Log.e(TAG, it.message.toString())
                                 binding.btnRegReg.revertAnimation()
+                            }
+                            else -> Unit
+                        }
+                    }
+                }
+
+                launch {
+                    viewModel.googleSignInState.collect { resource ->
+                        when (resource) {
+                            is Resource.Loading -> Log.d(TAG, "Signing in with Google...")
+                            is Resource.Success -> {
+                                AlertDialog.Builder(requireContext())
+                                    .setTitle("Success")
+                                    .setMessage("Welcome, ${resource.data?.firstName}!")
+                                    .setPositiveButton("OK") { dialog, _ ->
+                                        dialog.dismiss()
+                                    }
+                                    .show()
+                            }
+                            is Resource.Error -> {
+                                Log.e(TAG, resource.message.toString())
                             }
                             else -> Unit
                         }

@@ -154,41 +154,45 @@
             app:layout_constraintEnd_toEndOf="@id/guidelineLoginRight"
             app:layout_constraintTop_toBottomOf="@id/btnRegReg" />
 
-        <ImageView
-            android:id="@+id/facebookLogin"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:src="@drawable/facebook_login"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="@id/guidelineLoginLeft"
-            app:layout_constraintTop_toBottomOf="@id/tvRegSubtitle3"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Facebook"
-            app:layout_constraintStart_toStartOf="@id/facebookLogin"
-            app:layout_constraintBottom_toBottomOf="@id/facebookLogin"
-            app:layout_constraintTop_toTopOf="@id/facebookLogin"
-            app:layout_constraintEnd_toEndOf="@id/facebookLogin"/>
-
-        <ImageView
-            android:id="@+id/gmailLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:src="@drawable/google_login"
             app:layout_constraintEnd_toEndOf="@id/guidelineLoginRight"
-            app:layout_constraintTop_toBottomOf="@id/tvRegSubtitle3"/>
+            app:layout_constraintTop_toBottomOf="@id/tvRegSubtitle3"
+            android:layout_marginVertical="8dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gmail"
-            app:layout_constraintStart_toStartOf="@id/gmailLogin"
-            app:layout_constraintBottom_toBottomOf="@id/gmailLogin"
-            app:layout_constraintTop_toTopOf="@id/gmailLogin"
-            app:layout_constraintEnd_toEndOf="@id/gmailLogin"/>
+            <Button
+                android:id="@+id/facebookRegButton"
+                style="@style/whiteButtonStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/optionButtonHeight"
+                android:drawableStart="@drawable/ic_facebook"
+                android:text="Facebook"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textSize="15sp"
+                android:elevation="10dp"/>
+            <Space
+                android:layout_width="12dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/gmailRegButton"
+                style="@style/whiteButtonStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/optionButtonHeight"
+                android:drawableStart="@drawable/ic_gmail"
+                android:text="Gmail"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textSize="15sp"
+                android:elevation="10dp"/>
+        </LinearLayout>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineLoginLeft"

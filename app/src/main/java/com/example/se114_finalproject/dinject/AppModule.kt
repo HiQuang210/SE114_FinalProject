@@ -1,5 +1,8 @@
 package com.example.se114_finalproject.dinject
 
+import android.app.Application
+import android.content.Context.MODE_PRIVATE
+import com.example.se114_finalproject.utilities.Constants.INTRO_SP
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
@@ -20,4 +23,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFirebaseFireStoreDatabase() = Firebase.firestore
+
+    @Provides
+    fun provideIntroSP(application: Application) = application.getSharedPreferences(INTRO_SP, MODE_PRIVATE)
 }

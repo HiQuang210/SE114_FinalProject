@@ -10,12 +10,12 @@ plugins {
 
 android {
     namespace = "com.example.se114_finalproject"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.se114_finalproject"
-        minSdk = 26
-        targetSdk = 34
+        minSdk = 27
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -100,7 +100,15 @@ dependencies {
     // Android KTX
     implementation(libs.androidx.navigation.fragment.ktx)
 
+    //Facebook/Gmail Register+Login
+    implementation ("com.google.android.gms:play-services-auth:21.2.0")
+    implementation ("com.facebook.android:facebook-android-sdk:17.0.2")
+
     // Dagger Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+
+    //BOM
+    implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
 }

@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.se114_finalproject.viewmodel
 
 import androidx.lifecycle.ViewModel
@@ -11,7 +13,10 @@ import com.example.se114_finalproject.utilities.validateFirstName
 import com.example.se114_finalproject.utilities.validateLastName
 import com.example.se114_finalproject.utilities.validatePassword
 import com.example.se114_finalproject.utilities.validatePasswordMatch
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -32,6 +37,9 @@ class RegisterVM @Inject constructor(private val firebaseAuth: FirebaseAuth, pri
 
     private val _successMessage = Channel<String>()
     val successMessage = _successMessage.receiveAsFlow()
+
+    private val _googleSignInState = MutableStateFlow<Resource<User>>(Resource.Unspecified())
+    val googleSignInState: Flow<Resource<User>> = _googleSignInState
 
     fun createAccountWithEmailAndPassword(user: User, password: String, confirmPassword: String) {
         val registerFieldState = RegisterFieldState(
@@ -91,6 +99,33 @@ class RegisterVM @Inject constructor(private val firebaseAuth: FirebaseAuth, pri
                 registerFieldState.email is RegisterValidation.Success &&
                 registerFieldState.password is RegisterValidation.Success &&
                 registerFieldState.confirmPassword is RegisterValidation.Success
+    }
+
+    fun signInWithGoogle(credential: AuthCredential, account: GoogleSignInAccount) {
+        _googleSignInState.value = Resource.Loading()
+
+        firebaseAuth.signInWithCredential(credential)
+            .addOnSuccessListener { authResult ->
+                val firebaseUser = authResult.user
+                if (firebaseUser != null) {
+                    val user = createUserFromGoogleAccount(account, firebaseUser)
+                    saveUserInfo(firebaseUser.uid, user)
+                }
+            }
+            .addOnFailureListener { exception ->
+                _googleSignInState.value = Resource.Error("Google sign-in failed: ${exception.message}")
+            }
+    }
+
+    private fun createUserFromGoogleAccount(
+        account: GoogleSignInAccount,
+        firebaseUser: FirebaseUser
+    ): User {
+        val firstName = account.givenName ?: ""
+        val lastName = account.familyName ?: ""
+        val email = firebaseUser.email ?: ""
+
+        return User(firstName = firstName, lastName = lastName, email = email)
     }
 
     private fun saveUserInfo(userID: String, user: User) {
