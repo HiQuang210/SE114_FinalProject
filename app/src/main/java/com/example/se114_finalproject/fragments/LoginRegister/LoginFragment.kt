@@ -1,7 +1,10 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.se114_finalproject.fragments.LoginRegister
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,13 +20,21 @@ import com.example.se114_finalproject.activities.ShoppingActivity
 import com.example.se114_finalproject.databinding.FragmentLoginBinding
 import com.example.se114_finalproject.utilities.Resource
 import com.example.se114_finalproject.viewmodel.LoginVM
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@Suppress("DEPRECATION")
 @AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var binding: FragmentLoginBinding
     private val viewModel by viewModels<LoginVM>()
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private val googleSignInRequestCode = 1001
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +47,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupGoogleSignIn()
+
         binding.tvLoginSubtitle2.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
@@ -56,7 +69,21 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 return@setOnClickListener
             }
 
-            viewModel.login(email, password)
+            viewModel.loginWithEmailAndPassword(email, password)
+        }
+
+        binding.gmailLoginButton.setOnClickListener {
+            val signInIntent = googleSignInClient.signInIntent
+            startActivityForResult(signInIntent, googleSignInRequestCode)
+        }
+
+        binding.chkShowPass.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.edLoginPassword.transformationMethod = null
+            } else {
+                binding.edLoginPassword.transformationMethod = android.text.method.PasswordTransformationMethod.getInstance()
+            }
+            binding.edLoginPassword.setSelection(binding.edLoginPassword.text?.length ?: 0)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -82,5 +109,36 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }
             }
         }
+    }
+
+    private fun setupGoogleSignIn() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == googleSignInRequestCode) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            if (task.isSuccessful) {
+                val account = task.result
+                account?.let {
+                    handleGoogleSignInResult(it)
+                }
+            } else {
+                Log.e("LoginFragment", "Google sign-in failed")
+            }
+        }
+    }
+
+    private fun handleGoogleSignInResult(account: GoogleSignInAccount) {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        viewModel.loginWithGoogle(credential)
     }
 }

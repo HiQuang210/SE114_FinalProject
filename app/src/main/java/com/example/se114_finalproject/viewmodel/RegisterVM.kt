@@ -41,6 +41,9 @@ class RegisterVM @Inject constructor(private val firebaseAuth: FirebaseAuth, pri
     private val _googleSignInState = MutableStateFlow<Resource<User>>(Resource.Unspecified())
     val googleSignInState: Flow<Resource<User>> = _googleSignInState
 
+    private val _facebookSignInState = MutableStateFlow<Resource<User>>(Resource.Unspecified())
+    val facebookSignInState: Flow<Resource<User>> = _facebookSignInState
+
     fun createAccountWithEmailAndPassword(user: User, password: String, confirmPassword: String) {
         val registerFieldState = RegisterFieldState(
             firstName = validateFirstName(user.firstName),
@@ -117,12 +120,37 @@ class RegisterVM @Inject constructor(private val firebaseAuth: FirebaseAuth, pri
             }
     }
 
+    fun signInWithFacebook(credential: AuthCredential) {
+        _facebookSignInState.value = Resource.Loading()
+
+        firebaseAuth.signInWithCredential(credential)
+            .addOnSuccessListener { authResult ->
+                val firebaseUser = authResult.user
+                if (firebaseUser != null) {
+                    val user = createUserFromFacebook(firebaseUser)
+                    saveUserInfo(firebaseUser.uid, user)
+                }
+            }
+            .addOnFailureListener { exception ->
+                _facebookSignInState.value = Resource.Error("Facebook sign-in failed: ${exception.message}")
+            }
+    }
+
     private fun createUserFromGoogleAccount(
         account: GoogleSignInAccount,
         firebaseUser: FirebaseUser
     ): User {
         val firstName = account.givenName ?: ""
         val lastName = account.familyName ?: ""
+        val email = firebaseUser.email ?: ""
+
+        return User(firstName = firstName, lastName = lastName, email = email)
+    }
+
+    private fun createUserFromFacebook(firebaseUser: FirebaseUser): User {
+        val nameParts = firebaseUser.displayName?.split(" ") ?: listOf("")
+        val firstName = nameParts.firstOrNull() ?: ""
+        val lastName = nameParts.drop(1).joinToString(" ")
         val email = firebaseUser.email ?: ""
 
         return User(firstName = firstName, lastName = lastName, email = email)

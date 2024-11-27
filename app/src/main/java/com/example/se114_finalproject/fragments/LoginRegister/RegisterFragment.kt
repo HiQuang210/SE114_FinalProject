@@ -21,6 +21,12 @@ import com.example.se114_finalproject.databinding.FragmentRegisterBinding
 import com.example.se114_finalproject.utilities.RegisterValidation
 import com.example.se114_finalproject.utilities.Resource
 import com.example.se114_finalproject.viewmodel.RegisterVM
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -41,6 +47,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private lateinit var binding: FragmentRegisterBinding
     private val viewModel by viewModels<RegisterVM>()
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var callbackManager: CallbackManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,10 +62,18 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         super.onViewCreated(view, savedInstanceState)
 
         setupGoogleSignIn()
+        setupFacebookSignIn()
 
         binding.gmailRegButton.setOnClickListener {
             val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE)
+        }
+
+        binding.facebookRegButton.setOnClickListener {
+            LoginManager.getInstance().logInWithReadPermissions(
+                this,
+                listOf("email", "public_profile")
+            )
         }
 
         binding.tvRegSubtitle2.setOnClickListener {
@@ -78,40 +93,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             }
         }
 
-        observeViewModel()
-    }
-
-    private fun setupGoogleSignIn() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == GOOGLE_SIGN_IN_REQUEST_CODE) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            if (task.isSuccessful) {
-                val account = task.result
-                account?.let {
-                    handleGoogleSignInResult(it)
-                }
-            } else {
-                Log.e(TAG, "Google sign-in failed: ${task.exception?.message}")
-            }
-        }
-    }
-
-    private fun handleGoogleSignInResult(account: GoogleSignInAccount) {
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        viewModel.signInWithGoogle(credential, account)
-    }
-
-    private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -137,6 +118,27 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     viewModel.googleSignInState.collect { resource ->
                         when (resource) {
                             is Resource.Loading -> Log.d(TAG, "Signing in with Google...")
+                            is Resource.Success -> {
+                                AlertDialog.Builder(requireContext())
+                                    .setTitle("Success")
+                                    .setMessage("Welcome, ${resource.data?.firstName}!")
+                                    .setPositiveButton("OK") { dialog, _ ->
+                                        dialog.dismiss()
+                                    }
+                                    .show()
+                            }
+                            is Resource.Error -> {
+                                Log.e(TAG, resource.message.toString())
+                            }
+                            else -> Unit
+                        }
+                    }
+                }
+
+                launch {
+                    viewModel.facebookSignInState.collect { resource ->
+                        when (resource) {
+                            is Resource.Loading -> Log.d(TAG, "Signing in with Facebook...")
                             is Resource.Success -> {
                                 AlertDialog.Builder(requireContext())
                                     .setTitle("Success")
@@ -211,6 +213,63 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 }
             }
         }
+    }
+
+    private fun setupGoogleSignIn() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+    }
+
+    private fun setupFacebookSignIn() {
+        callbackManager = CallbackManager.Factory.create()
+
+        LoginManager.getInstance().registerCallback(
+            callbackManager,
+            object : FacebookCallback<LoginResult> {
+                override fun onSuccess(result: LoginResult) {
+                    handleFacebookSignInResult(result.accessToken)
+                }
+
+                override fun onCancel() {
+                    Log.d(TAG, "Facebook login canceled")
+                }
+
+                override fun onError(error: FacebookException) {
+                    Log.e(TAG, "Facebook login failed: ${error.message}")
+                }
+            }
+        )
+    }
+
+    private fun handleFacebookSignInResult(accessToken: AccessToken) {
+        val credential = com.google.firebase.auth.FacebookAuthProvider.getCredential(accessToken.token)
+        viewModel.signInWithFacebook(credential)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GOOGLE_SIGN_IN_REQUEST_CODE) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            if (task.isSuccessful) {
+                val account = task.result
+                account?.let {
+                    handleGoogleSignInResult(it)
+                }
+            } else {
+                Log.e(TAG, "Google sign-in failed: ${task.exception?.message}")
+            }
+        }
+    }
+
+    private fun handleGoogleSignInResult(account: GoogleSignInAccount) {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        viewModel.signInWithGoogle(credential, account)
     }
 
     private fun showSuccessDialog(message: String) {
