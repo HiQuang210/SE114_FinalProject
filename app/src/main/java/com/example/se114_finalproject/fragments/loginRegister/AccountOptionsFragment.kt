@@ -1,4 +1,4 @@
-package com.example.se114_finalproject.fragments.LoginRegister
+package com.example.se114_finalproject.fragments.loginRegister
 
 import android.os.Bundle
 import android.view.LayoutInflater

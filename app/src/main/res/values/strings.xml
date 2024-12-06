@@ -24,4 +24,5 @@
     <string name="btnResetText">Send</string>
     <string name="btnBackText">Back</string>
     <string name="default_web_client_id">285721036732-4q86fpr0s8q5me43b80gipfjsap9pf3g.apps.googleusercontent.com</string>
+    <string name="searchbar_product">Search Product...</string>
 </resources>

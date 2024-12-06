@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/introFragment"
-        android:name="com.example.se114_finalproject.fragments.LoginRegister.IntroFragment"
+        android:name="com.example.se114_finalproject.fragments.loginRegister.IntroFragment"
         android:label="IntroFragment"
         tools:layout="@layout/fragment_intro">
         <action
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.se114_finalproject.fragments.LoginRegister.LoginFragment"
+        android:name="com.example.se114_finalproject.fragments.loginRegister.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
@@ -41,7 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.se114_finalproject.fragments.LoginRegister.RegisterFragment"
+        android:name="com.example.se114_finalproject.fragments.loginRegister.RegisterFragment"
         android:label="RegisterFragment"
         tools:layout="@layout/fragment_register">
         <action
@@ -55,7 +55,7 @@
     </fragment>
     <fragment
         android:id="@+id/accountOptionsFragment"
-        android:name="com.example.se114_finalproject.fragments.LoginRegister.AccountOptionsFragment"
+        android:name="com.example.se114_finalproject.fragments.loginRegister.AccountOptionsFragment"
         android:label="AccountOptionsFragment"
         tools:layout="@layout/fragment_account_options">
         <action
@@ -75,7 +75,7 @@
     </fragment>
     <fragment
         android:id="@+id/resetPasswordFragment"
-        android:name="com.example.se114_finalproject.fragments.LoginRegister.ResetPasswordFragment"
+        android:name="com.example.se114_finalproject.fragments.loginRegister.ResetPasswordFragment"
         android:label="ResetPasswordFragment"
         tools:layout="@layout/fragment_resetpass">
         <action

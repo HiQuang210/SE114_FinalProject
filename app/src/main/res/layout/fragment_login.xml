@@ -164,9 +164,9 @@
                 android:paddingEnd="16dp"
                 android:textSize="15sp"
                 android:elevation="10dp"/>
-            <Space
+            <View
                 android:layout_width="12dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent" />
             <Button
                 android:id="@+id/gmailLoginButton"
                 style="@style/whiteButtonStyle"

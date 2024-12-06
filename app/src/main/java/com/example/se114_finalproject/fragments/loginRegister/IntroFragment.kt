@@ -1,4 +1,4 @@
-package com.example.se114_finalproject.fragments.LoginRegister
+package com.example.se114_finalproject.fragments.loginRegister
 
 import android.content.Intent
 import android.os.Bundle
