@@ -16,7 +16,7 @@ class AccountOptionsFragment : Fragment(R.layout.fragment_account_options) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentAccountOptionsBinding.inflate(inflater)
         return binding.root
     }
