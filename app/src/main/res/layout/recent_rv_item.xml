@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/img_product"
-            android:layout_width="114dp"
-            android:layout_height="108dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -35,23 +35,37 @@
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_light"
+                android:fontFamily="@font/poppins_semibold"
                 android:text="Chair"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_weight="1"/>
 
             <ImageView
                 android:id="@+id/img_favorite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginEnd="16dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_favorite"
                 app:tint="@color/blue_gray200" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_old_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="15dp"
+            android:fontFamily="@font/sf_pro_display_regular"
+            android:text="50.000"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_new_price"
+            app:layout_constraintTop_toBottomOf="@id/linear_product_name"
+            android:layout_marginStart="10dp"/>
 
         <TextView
             android:id="@+id/tv_new_price"
@@ -60,24 +74,9 @@
             android:layout_marginTop="3dp"
             android:layout_marginBottom="15dp"
             android:fontFamily="@font/sf_pro_display_regular"
-            android:text="50.000"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_price"
-            app:layout_constraintTop_toBottomOf="@id/linear_product_name"
-            android:layout_marginStart="10dp"/>
-
-        <TextView
-            android:id="@+id/tv_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="15dp"
-            android:fontFamily="@font/sf_pro_display_regular"
             android:text="VND 35.000"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/img_product"
             app:layout_constraintTop_toBottomOf="@id/linear_product_name" />

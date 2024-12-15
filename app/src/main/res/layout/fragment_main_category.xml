@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Best deals"
+                android:text="Best Deals"
                 android:textColor="@color/black"
                 android:textSize="22sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +83,7 @@
                 android:overScrollMode="never" />
 
             <ProgressBar
-                android:id="@+id/bestProductsProgressbar"
+                android:id="@+id/newProductsProgressbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
