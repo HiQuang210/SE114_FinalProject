@@ -18,6 +18,12 @@
         <item name="android:textSize">@dimen/h4TextSize</item>
     </style>
 
+    <style name="h5">
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/h5TextSize</item>
+    </style>
+
     <style name="blueButtonStyle">
         <item name="android:background">@drawable/blue_background</item>
         <item name="android:fontFamily">@font/poppins_regular</item>
@@ -52,4 +58,5 @@
     <dimen name="h4TextSize">35sp</dimen>
     <dimen name="h2TextSize">17sp</dimen>
     <dimen name="h3TextSize">22sp</dimen>
+    <dimen name="h5TextSize">23sp</dimen>
 </resources>
