@@ -14,8 +14,7 @@ import com.example.se114_finalproject.helper.getProductPrice
 
 class NewProductsAdapter : RecyclerView.Adapter<NewProductsAdapter.RecentViewHolder>() {
 
-    inner class RecentViewHolder(private val binding: RecentRvItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class RecentViewHolder(private val binding: RecentRvItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(product: Product) {
             binding.apply {
                 Glide.with(itemView).load(product.images[0]).into(imgProduct)

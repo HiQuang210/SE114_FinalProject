@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +13,7 @@ import com.example.se114_finalproject.R
 import com.example.se114_finalproject.adapters.BestDealsAdapter
 import com.example.se114_finalproject.adapters.NewProductsAdapter
 import com.example.se114_finalproject.databinding.FragmentBaseCategoryBinding
+import com.example.se114_finalproject.utilities.showBottomNavigationView
 
 open class BaseCategoryFragment: Fragment(R.layout.fragment_base_category){
     private lateinit var binding: FragmentBaseCategoryBinding
@@ -31,6 +33,16 @@ open class BaseCategoryFragment: Fragment(R.layout.fragment_base_category){
         super.onViewCreated(view, savedInstanceState)
         setupOfferRv()
         setupNewProductsRv()
+
+        offerAdapter.onClick = {
+            val b = Bundle().apply { putParcelable("product",it) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment,b)
+        }
+
+        newProductsAdapter.onClick = {
+            val b = Bundle().apply { putParcelable("product",it) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment,b)
+        }
 
         binding.rvOfferProducts.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -77,5 +89,10 @@ open class BaseCategoryFragment: Fragment(R.layout.fragment_base_category){
                 GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
             adapter = newProductsAdapter
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showBottomNavigationView()
     }
 }

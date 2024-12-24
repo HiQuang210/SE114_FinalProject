@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.se114_finalproject.R
@@ -19,6 +20,7 @@ import com.example.se114_finalproject.adapters.NewProductsAdapter
 import com.example.se114_finalproject.adapters.RandomProductsAdapter
 import com.example.se114_finalproject.databinding.FragmentMainCategoryBinding
 import com.example.se114_finalproject.utilities.Resource
+import com.example.se114_finalproject.utilities.showBottomNavigationView
 import com.example.se114_finalproject.viewmodel.MainCategoryVM
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -46,6 +48,22 @@ class MainCategory : Fragment(R.layout.fragment_main_category) {
         setupRandomProductRv()
         setupBestDealsRv()
         setupNewProductsRv()
+
+        randomProductsAdapter.onClick = {
+            val b = Bundle().apply { putParcelable("product",it) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment,b)
+        }
+
+        bestDealsAdapter.onClick = {
+            val b = Bundle().apply { putParcelable("product",it) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment,b)
+        }
+
+        newProductsAdapter.onClick = {
+            val b = Bundle().apply { putParcelable("product",it) }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment,b)
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -99,6 +117,7 @@ class MainCategory : Fragment(R.layout.fragment_main_category) {
                 }
             }
         }
+
         binding.nestedScrollMainCategory.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
             if (v.getChildAt(0).bottom <= v.height + scrollY) {
                 viewModel.fetchNewProducts()
@@ -135,5 +154,10 @@ class MainCategory : Fragment(R.layout.fragment_main_category) {
             layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
             adapter = newProductsAdapter
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showBottomNavigationView()
     }
 }

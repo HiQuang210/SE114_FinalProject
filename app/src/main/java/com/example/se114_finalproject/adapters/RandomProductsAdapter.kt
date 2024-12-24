@@ -65,5 +65,5 @@ class RandomProductsAdapter : RecyclerView.Adapter<RandomProductsAdapter.RandomP
         return differ.currentList.size
     }
 
-    private var onClick: ((Product) -> Unit)? = null
+    var onClick: ((Product) -> Unit)? = null
 }

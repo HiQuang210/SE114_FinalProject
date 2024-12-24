@@ -74,19 +74,18 @@
             android:textAllCaps="false" />
 
         <LinearLayout
-            android:layout_width="23dp"
-            android:layout_height="23dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:background="@drawable/icon_background"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center">
+
             <ImageView
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:src="@drawable/ic_favorite"
-                android:layout_gravity="center"
-                android:layout_marginTop="7dp"
-                />
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/ic_favorite" />
         </LinearLayout>
 
 
