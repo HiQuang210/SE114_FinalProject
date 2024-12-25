@@ -100,9 +100,6 @@ dependencies {
     // ViewPager2 indicator
     implementation("androidx.viewpager2:viewpager2:1.1.0")
 
-    // StepView
-    //implementation("com.params:stepview-android:1.0.0")
-
     // Android KTX
     implementation(libs.androidx.navigation.fragment.ktx)
 
@@ -119,5 +116,5 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:19.0.0")
 
     //Kotlin Coroutine
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
 }
