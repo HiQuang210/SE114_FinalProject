@@ -70,6 +70,11 @@ class CartFragment : Fragment(R.layout.fragment_cart){
             viewModel.changeQuantity(it, FirebaseCommon.QuantityChanging.DECREASE)
         }
 
+        binding.buttonCheckout.setOnClickListener {
+            val action = CartFragmentDirections.actionCartFragmentToBillingFragment(totalPrice, cartAdapter.differ.currentList.toTypedArray())
+            findNavController().navigate(action)
+        }
+
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.deleteDialog.collectLatest {
