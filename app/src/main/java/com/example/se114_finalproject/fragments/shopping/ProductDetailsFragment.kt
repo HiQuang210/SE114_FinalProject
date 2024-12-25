@@ -104,7 +104,7 @@ class ProductDetailsFragment : Fragment() {
                         is Resource.Success -> {
                             binding.buttonAddToCart.revertAnimation()
                             binding.buttonAddToCart.setBackgroundColor(
-                                ContextCompat.getColor(requireContext(), R.color.black)
+                                ContextCompat.getColor(requireContext(), R.color.skyblue)
                             )
                         }
                         is Resource.Error -> {
