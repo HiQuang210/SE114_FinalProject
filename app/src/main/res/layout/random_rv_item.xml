@@ -64,7 +64,7 @@
             android:layout_height="30dp"
             android:background="@drawable/violet_background"
             android:fontFamily="@font/poppins_light"
-            android:text="Add to cart"
+            android:text="View"
             android:textColor="@color/white"
             android:textSize="12sp"
             android:textStyle="bold"
