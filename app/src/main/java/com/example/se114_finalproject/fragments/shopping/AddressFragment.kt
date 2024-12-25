@@ -60,7 +60,6 @@ class AddressFragment : Fragment() {
             }
         }
 
-        // Observe error state
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.error.collectLatest {
@@ -69,7 +68,6 @@ class AddressFragment : Fragment() {
             }
         }
 
-        // Retrieve address argument and populate fields if editing
         val address = args.address
         if (address == null) {
             binding.btnDelete.visibility = View.GONE
@@ -84,7 +82,6 @@ class AddressFragment : Fragment() {
             }
         }
 
-        // Save button click handler
         binding.apply {
             buttonSave.setOnClickListener {
                 val addressTitle = edAddressTitle.text.toString()
@@ -97,6 +94,10 @@ class AddressFragment : Fragment() {
 
                 viewModel.addAddress(address)
             }
+        }
+
+        binding.imageAddressClose.setOnClickListener {
+            findNavController().navigateUp()
         }
     }
 }

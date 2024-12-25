@@ -75,6 +75,10 @@ class CartFragment : Fragment(R.layout.fragment_cart){
             findNavController().navigate(action)
         }
 
+        binding.imageCloseCart.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.deleteDialog.collectLatest {
